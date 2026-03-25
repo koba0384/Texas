@@ -1,7 +1,16 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="NEON HOLD'EM", page_icon="🃏", layout="wide")
+st.set_page_config(page_title="NEON HOLD'EM", page_icon="🃏", layout="centered", initial_sidebar_state="collapsed")
+
+st.markdown("""
+<style>
+  .block-container {padding-top: 1rem; padding-bottom: 0.5rem;}
+  [data-testid="stHeader"] {display:none;}
+  #MainMenu {visibility:hidden;}
+  footer {visibility:hidden;}
+</style>
+""", unsafe_allow_html=True)
 
 HTML = r'''
 <!doctype html>
@@ -21,8 +30,11 @@ HTML = r'''
       radial-gradient(circle at bottom, rgba(0, 255, 180, 0.10), transparent 24%),
       linear-gradient(180deg, #08121f 0%, #050b14 100%);
   }
-  .nh-root { min-height: 1080px; padding: 20px; }
-  .nh-shell { max-width: 1500px; margin: 0 auto; }
+  .nh-root {
+    min-height: 100vh;
+    padding: max(12px, env(safe-area-inset-top)) 12px calc(12px + env(safe-area-inset-bottom));
+  }
+  .nh-shell { max-width: 1400px; margin: 0 auto; }
   .nh-header {
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
     margin-bottom: 16px; flex-wrap: wrap;
@@ -161,6 +173,13 @@ HTML = r'''
   .nh-preset:disabled { opacity: .4; cursor: not-allowed; }
   .nh-action-summary { margin-top: 10px; color: #c8d7ef; font-size: 13px; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
   .nh-side-panel { padding: 14px; }
+  .nh-side-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .nh-side-panel-close {
+    appearance: none; border: 1px solid rgba(160, 198, 255, 0.16);
+    background: rgba(255,255,255,0.05); color: #dce9ff; border-radius: 12px;
+    padding: 9px 12px; cursor: pointer; font-weight: 700; white-space: nowrap;
+  }
+  .nh-side-panel-close:hover { border-color: rgba(120, 242, 218, 0.3); }
   .nh-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
   .nh-tab {
     flex: 1; border-radius: 14px; padding: 11px 12px; text-align: center; cursor: pointer;
@@ -187,16 +206,87 @@ HTML = r'''
   @keyframes nh-float { 0% { opacity: 0; transform: translateY(8px) scale(0.96); } 20% { opacity: 1; } 100% { opacity: 1; transform: translateY(0) scale(1); } }
   @media (max-width: 1180px) { .nh-layout { grid-template-columns: 1fr; } .nh-side-content { max-height: none; } }
   @media (max-width: 860px) {
-    .nh-root { padding: 10px; }
-    .nh-table { min-height: 980px; }
-    .nh-seat { width: calc(100% - 24px); }
-    .nh-seat.seat-0 { left: 12px; right: 12px; bottom: 12px; transform: none; width: auto; }
-    .nh-seat.seat-1 { left: 12px; top: 140px; transform: none; width: auto; }
-    .nh-seat.seat-2 { left: 12px; right: 12px; top: 12px; transform: none; width: auto; }
-    .nh-seat.seat-3 { left: 12px; right: 12px; top: 300px; transform: none; width: auto; }
-    .nh-seat.active.seat-0, .nh-seat.active.seat-1, .nh-seat.active.seat-2, .nh-seat.active.seat-3 { transform: scale(1.01); }
-    .nh-center { top: 58%; }
+    .nh-root { padding: 8px 8px calc(10px + env(safe-area-inset-bottom)); }
+    .nh-header { margin-bottom: 10px; }
+    .nh-title-wrap h1 { font-size: 22px; }
+    .nh-title-wrap p { font-size: 12px; }
+    .nh-top-actions { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .nh-btn { padding: 11px 12px; font-size: 14px; }
+    .nh-stage-panel { padding: 10px; border-radius: 20px; }
+    .nh-stage-top { gap: 8px; margin-bottom: 10px; }
+    .nh-status-strip { gap: 6px; }
+    .nh-pill { padding: 6px 10px; font-size: 11px; }
+
+    .nh-table {
+      min-height: 700px;
+      border-radius: 24px;
+      box-shadow: inset 0 0 0 8px rgba(74, 36, 18, 0.68), inset 0 0 0 11px rgba(146, 93, 59, 0.20), 0 18px 30px rgba(0, 0, 0, 0.34);
+    }
+    .nh-table::before { inset: 10px; }
+    .nh-center { top: 46%; width: min(92%, 360px); gap: 10px; }
+    .nh-community { gap: 6px; min-height: 84px; }
+    .nh-card { width: 54px; height: 76px; border-radius: 12px; }
+    .nh-card.small { width: 46px; height: 64px; border-radius: 10px; }
+    .nh-card-corner { font-size: 12px; left: 6px; top: 5px; }
+    .nh-card-corner.bottom { right: 6px; bottom: 5px; }
+    .nh-card-suit { font-size: 24px; }
+    .nh-pot { min-width: 150px; padding: 10px 14px; border-radius: 18px; }
+    .nh-pot-value { font-size: 28px; }
+    .nh-winner-banner { padding: 10px 12px; font-size: 13px; }
+
+    .nh-seat { padding: 10px; width: auto; border-radius: 16px; }
+    .nh-seat-head { gap: 6px; align-items: flex-start; }
+    .nh-player-name { font-size: 12px; }
+    .nh-player-style { display: none; }
+    .nh-role-badges { gap: 4px; }
+    .nh-role-badge { min-width: 28px; font-size: 10px; padding: 3px 6px; }
+    .nh-stack-row { margin-top: 8px; gap: 6px; font-size: 11px; }
+    .nh-pressure-bar { margin-top: 8px; height: 6px; }
+    .nh-cards { gap: 8px; margin-top: 8px; min-height: 64px; }
+    .nh-best-hand { margin-top: 6px; min-height: 14px; font-size: 10px; }
+    .nh-action-badge { right: 8px; bottom: 8px; font-size: 10px; padding: 5px 8px; }
+
+    .nh-seat.seat-2 { left: 10px; right: 10px; top: 10px; transform: none; width: auto; }
+    .nh-seat.seat-1 { left: 10px; top: 120px; transform: none; width: calc(50% - 15px); }
+    .nh-seat.seat-3 { right: 10px; top: 120px; transform: none; width: calc(50% - 15px); }
+    .nh-seat.seat-0 { left: 10px; right: 10px; bottom: 10px; transform: none; width: auto; }
+
+    .nh-seat.active.seat-0 { transform: scale(1.01); }
+    .nh-seat.active.seat-1 { transform: scale(1.01); transform-origin: left center; }
+    .nh-seat.active.seat-2 { transform: scale(1.01); }
+    .nh-seat.active.seat-3 { transform: scale(1.01); transform-origin: right center; }
+
+    .nh-control-panel { margin-top: 10px; gap: 10px; }
+    .nh-info-card, .nh-action-panel { padding: 12px; border-radius: 16px; }
+    .nh-info-card h3, .nh-action-panel h3 { font-size: 13px; margin-bottom: 6px; }
+    .nh-phase-copy, .nh-action-summary, .nh-footer-note { font-size: 12px; line-height: 1.55; }
     .nh-action-grid, .nh-raise-presets { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .nh-preset { padding: 9px 8px; }
+
+    .nh-side-panel {
+      position: sticky;
+      bottom: calc(8px + env(safe-area-inset-bottom));
+      z-index: 30;
+      max-height: 58px;
+      padding: 10px;
+      border-radius: 18px;
+      overflow: hidden;
+      transition: max-height 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    }
+    .nh-side-panel.open {
+      max-height: min(56vh, 420px);
+      border-color: rgba(132, 246, 224, 0.18);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.36);
+    }
+    .nh-side-panel-head { margin-bottom: 0; }
+    .nh-side-panel.open .nh-side-panel-head { margin-bottom: 10px; }
+    .nh-side-panel:not(.open) .nh-side-content { display: none; }
+    .nh-side-panel-close { padding: 8px 10px; font-size: 12px; }
+    .nh-tabs { margin-bottom: 0; }
+    .nh-side-panel.open .nh-tabs { margin-bottom: 10px; }
+    .nh-side-content { max-height: calc(min(56vh, 420px) - 86px); padding-right: 2px; }
+    .nh-rule-card, .nh-log-item { padding: 10px; margin-bottom: 8px; }
+    .nh-rule-card p, .nh-rule-card li, .nh-log-item, .nh-rank-row { font-size: 12px; }
   }
 </style>
 </head>
@@ -251,6 +341,7 @@ function createEmptyGame() {
     players: createBasePlayers(), streetBets: Array(PLAYER_COUNT).fill(0), totalBets: Array(PLAYER_COUNT).fill(0),
     currentBet: 0, minRaise: BIG_BLIND, pot: 0, currentPlayer: -1, pending: [], waitingAdvance: false,
     winnerText: "", showdownSummary: [], log: [], panelTab: "rules", selectedRaiseTarget: BIG_BLIND,
+    sidePanelOpen: !window.matchMedia("(max-width: 860px)").matches,
   };
 }
 function createDeck() {
@@ -562,7 +653,8 @@ function maybeSchedule() {
   }, 700 + Math.random() * 500);
 }
 function onAction(type, targetTotal = 0) { game = applyAction(game, 0, type, targetTotal); recomputeSelectedRaiseTarget(); render(); }
-function setPanelTab(tab) { game.panelTab = tab; render(); }
+function setPanelTab(tab) { game.panelTab = tab; if (window.matchMedia('(max-width: 860px)').matches) game.sidePanelOpen = true; render(); }
+function setPanelOpen(open) { game.sidePanelOpen = open; render(); }
 function newHand(keepDealer = false) { game = dealNewHand(game, keepDealer); recomputeSelectedRaiseTarget(); render(); }
 
 function render() {
@@ -588,7 +680,7 @@ function render() {
         </div>
         <div class="nh-top-actions">
           <button class="nh-btn primary" data-act="new-hand">新しいハンド</button>
-          <button class="nh-btn" data-act="toggle-tab">${game.panelTab === 'rules' ? 'ログを見る' : 'ルールを見る'}</button>
+          <button class="nh-btn" data-act="toggle-panel">${game.sidePanelOpen ? 'パネルを閉じる' : 'ルール / ログ'}</button>
         </div>
       </div>
       <div class="nh-layout">
@@ -661,10 +753,13 @@ function render() {
             </div>
           </div>
         </section>
-        <aside class="nh-side-panel">
-          <div class="nh-tabs">
-            <button class="nh-tab ${game.panelTab === 'rules' ? 'active' : ''}" data-tab="rules">ルール</button>
-            <button class="nh-tab ${game.panelTab === 'log' ? 'active' : ''}" data-tab="log">ログ</button>
+        <aside class="nh-side-panel ${game.sidePanelOpen ? 'open' : ''}">
+          <div class="nh-side-panel-head">
+            <div class="nh-tabs">
+              <button class="nh-tab ${game.panelTab === 'rules' ? 'active' : ''}" data-tab="rules">ルール</button>
+              <button class="nh-tab ${game.panelTab === 'log' ? 'active' : ''}" data-tab="log">ログ</button>
+            </div>
+            <button class="nh-side-panel-close" data-act="toggle-panel">${game.sidePanelOpen ? '閉じる' : '開く'}</button>
           </div>
           <div class="nh-side-content">
             ${game.panelTab === 'log' ? game.log.map((entry) => `<div class="nh-log-item">${esc(entry.text)}</div>`).join('') : `
@@ -684,7 +779,7 @@ function render() {
 
   app.querySelectorAll('[data-tab]').forEach((el) => el.addEventListener('click', () => setPanelTab(el.getAttribute('data-tab'))));
   app.querySelector('[data-act="new-hand"]').addEventListener('click', () => newHand(false));
-  app.querySelector('[data-act="toggle-tab"]').addEventListener('click', () => setPanelTab(game.panelTab === 'rules' ? 'log' : 'rules'));
+  app.querySelectorAll('[data-act="toggle-panel"]').forEach((el) => el.addEventListener('click', () => setPanelOpen(!game.sidePanelOpen)));
   const nextBtn = app.querySelector('[data-act="next-hand"]'); if (nextBtn) nextBtn.addEventListener('click', () => newHand(false));
   const foldBtn = app.querySelector('[data-act="fold"]'); if (foldBtn) foldBtn.addEventListener('click', () => onAction('fold'));
   const callBtn = app.querySelector('[data-act="call"]'); if (callBtn) callBtn.addEventListener('click', () => onAction('call'));
@@ -702,14 +797,9 @@ render();
 '''
 
 st.title("NEON HOLD'EM")
-st.caption("Streamlit Community Cloud / GitHub デプロイ向けの単一ファイル版")
+st.caption("iPhone 向けに縦長を圧縮したコンパクト版")
 
-st.info(
-    "この版は React コンポーネントをそのまま動かすのではなく、"
-    "Streamlit の `st.components.v1.html()` に HTML/CSS/JavaScript を埋め込んで表示する構成です。"
-)
-
-components.html(HTML, height=1180, scrolling=True)
+components.html(HTML, height=980, scrolling=True)
 
 with st.expander("デプロイ手順メモ", expanded=False):
     st.markdown(
