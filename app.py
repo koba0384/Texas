@@ -1,7 +1,7 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="NEON HOLD'EM", page_icon="🃏", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="NEON HOLD'EM", page_icon="🃏", layout="wide", initial_sidebar_state="collapsed")
 
 st.markdown("""
 <style>
@@ -206,87 +206,163 @@ HTML = r'''
   @keyframes nh-float { 0% { opacity: 0; transform: translateY(8px) scale(0.96); } 20% { opacity: 1; } 100% { opacity: 1; transform: translateY(0) scale(1); } }
   @media (max-width: 1180px) { .nh-layout { grid-template-columns: 1fr; } .nh-side-content { max-height: none; } }
   @media (max-width: 860px) {
-    .nh-root { padding: 8px 8px calc(10px + env(safe-area-inset-bottom)); }
-    .nh-header { margin-bottom: 10px; }
-    .nh-title-wrap h1 { font-size: 22px; }
-    .nh-title-wrap p { font-size: 12px; }
-    .nh-top-actions { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .nh-btn { padding: 11px 12px; font-size: 14px; }
-    .nh-stage-panel { padding: 10px; border-radius: 20px; }
-    .nh-stage-top { gap: 8px; margin-bottom: 10px; }
-    .nh-status-strip { gap: 6px; }
-    .nh-pill { padding: 6px 10px; font-size: 11px; }
+    .nh-root { padding: 4px 4px calc(4px + env(safe-area-inset-bottom)); }
+    .nh-shell { max-width: none; }
+    .nh-header { gap: 6px; margin-bottom: 6px; align-items: center; }
+    .nh-title-wrap h1 { font-size: 18px; letter-spacing: 0.04em; }
+    .nh-title-wrap p { display: none; }
+    .nh-top-actions { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+    .nh-btn { padding: 8px 9px; font-size: 12px; border-radius: 11px; }
+
+    .nh-layout { grid-template-columns: 1fr; gap: 8px; }
+    .nh-stage-panel { padding: 6px; border-radius: 16px; }
+    .nh-stage-top { gap: 4px; margin-bottom: 6px; }
+    .nh-status-strip { gap: 4px; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 1px; }
+    .nh-status-strip::-webkit-scrollbar { display: none; }
+    .nh-pill { padding: 5px 8px; font-size: 10px; white-space: nowrap; }
 
     .nh-table {
-      min-height: 700px;
-      border-radius: 24px;
-      box-shadow: inset 0 0 0 8px rgba(74, 36, 18, 0.68), inset 0 0 0 11px rgba(146, 93, 59, 0.20), 0 18px 30px rgba(0, 0, 0, 0.34);
+      min-height: 500px;
+      border-radius: 20px;
+      box-shadow: inset 0 0 0 7px rgba(74, 36, 18, 0.68), inset 0 0 0 10px rgba(146, 93, 59, 0.20), 0 14px 24px rgba(0, 0, 0, 0.30);
     }
-    .nh-table::before { inset: 10px; }
-    .nh-center { top: 46%; width: min(92%, 360px); gap: 10px; }
-    .nh-community { gap: 6px; min-height: 84px; }
-    .nh-card { width: 54px; height: 76px; border-radius: 12px; }
-    .nh-card.small { width: 46px; height: 64px; border-radius: 10px; }
-    .nh-card-corner { font-size: 12px; left: 6px; top: 5px; }
-    .nh-card-corner.bottom { right: 6px; bottom: 5px; }
-    .nh-card-suit { font-size: 24px; }
-    .nh-pot { min-width: 150px; padding: 10px 14px; border-radius: 18px; }
-    .nh-pot-value { font-size: 28px; }
-    .nh-winner-banner { padding: 10px 12px; font-size: 13px; }
+    .nh-table::before { inset: 8px; border-radius: 18px; }
 
-    .nh-seat { padding: 10px; width: auto; border-radius: 16px; }
-    .nh-seat-head { gap: 6px; align-items: flex-start; }
-    .nh-player-name { font-size: 12px; }
+    .nh-center {
+      left: 56px;
+      top: 280px;
+      transform: translate(-50%, -50%);
+      width: 96px;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .nh-center .nh-btn { width: 96px; padding: 6px 8px; font-size: 10px; border-radius: 10px; }
+    .nh-community {
+      gap: 2px;
+      min-height: auto;
+      justify-content: flex-start;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .nh-card { width: 30px; height: 42px; border-radius: 8px; }
+    .nh-card.small { width: 18px; height: 26px; border-radius: 6px; }
+    .nh-card-corner { font-size: 8px; left: 3px; top: 2px; }
+    .nh-card-corner.bottom { right: 3px; bottom: 2px; }
+    .nh-card-suit { font-size: 14px; }
+    .nh-pot { min-width: 92px; padding: 6px 8px; border-radius: 12px; }
+    .nh-pot-label { font-size: 8px; }
+    .nh-pot-value { font-size: 17px; }
+    .nh-winner-banner { padding: 6px 8px; font-size: 10px; border-radius: 10px; }
+
+    .nh-seat {
+      width: 92px;
+      padding: 6px;
+      border-radius: 12px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.20);
+    }
+    .nh-seat.active { transform: none; }
+    .nh-seat-head { gap: 3px; align-items: flex-start; }
+    .nh-player-name { font-size: 10px; }
     .nh-player-style { display: none; }
-    .nh-role-badges { gap: 4px; }
-    .nh-role-badge { min-width: 28px; font-size: 10px; padding: 3px 6px; }
-    .nh-stack-row { margin-top: 8px; gap: 6px; font-size: 11px; }
-    .nh-pressure-bar { margin-top: 8px; height: 6px; }
-    .nh-cards { gap: 8px; margin-top: 8px; min-height: 64px; }
-    .nh-best-hand { margin-top: 6px; min-height: 14px; font-size: 10px; }
-    .nh-action-badge { right: 8px; bottom: 8px; font-size: 10px; padding: 5px 8px; }
+    .nh-role-badges { gap: 3px; }
+    .nh-role-badge { min-width: 20px; font-size: 8px; padding: 2px 4px; }
+    .nh-stack-row { margin-top: 4px; gap: 2px; font-size: 9px; flex-direction: column; align-items: flex-start; }
+    .nh-pressure-bar { margin-top: 4px; height: 4px; }
+    .nh-cards { gap: 3px; margin-top: 4px; min-height: 26px; }
+    .nh-best-hand { display: none; }
+    .nh-action-badge { right: 4px; bottom: 4px; font-size: 8px; padding: 2px 5px; }
 
-    .nh-seat.seat-2 { left: 10px; right: 10px; top: 10px; transform: none; width: auto; }
-    .nh-seat.seat-1 { left: 10px; top: 120px; transform: none; width: calc(50% - 15px); }
-    .nh-seat.seat-3 { right: 10px; top: 120px; transform: none; width: calc(50% - 15px); }
-    .nh-seat.seat-0 { left: 10px; right: 10px; bottom: 10px; transform: none; width: auto; }
+    .nh-seat.seat-2 { left: 8px; top: 8px; transform: none; }
+    .nh-seat.seat-1 { left: 8px; top: 88px; transform: none; }
+    .nh-seat.seat-3 { left: 8px; top: 168px; transform: none; }
+    .nh-seat.seat-0 {
+      left: 106px;
+      right: 8px;
+      bottom: 68px;
+      transform: none;
+      width: auto;
+      padding: 8px;
+    }
+    .nh-seat.seat-0 .nh-player-name { font-size: 12px; }
+    .nh-seat.seat-0 .nh-stack-row { margin-top: 5px; font-size: 10px; flex-direction: row; gap: 6px; align-items: center; }
+    .nh-seat.seat-0 .nh-pressure-bar { height: 5px; margin-top: 5px; }
+    .nh-seat.seat-0 .nh-cards { gap: 6px; margin-top: 6px; min-height: 48px; }
+    .nh-seat.seat-0 .nh-card.small { width: 34px; height: 48px; border-radius: 8px; }
+    .nh-seat.seat-0 .nh-best-hand { display: block; margin-top: 5px; min-height: 12px; font-size: 10px; }
 
-    .nh-seat.active.seat-0 { transform: scale(1.01); }
-    .nh-seat.active.seat-1 { transform: scale(1.01); transform-origin: left center; }
-    .nh-seat.active.seat-2 { transform: scale(1.01); }
-    .nh-seat.active.seat-3 { transform: scale(1.01); transform-origin: right center; }
-
-    .nh-control-panel { margin-top: 10px; gap: 10px; }
-    .nh-info-card, .nh-action-panel { padding: 12px; border-radius: 16px; }
-    .nh-info-card h3, .nh-action-panel h3 { font-size: 13px; margin-bottom: 6px; }
-    .nh-phase-copy, .nh-action-summary, .nh-footer-note { font-size: 12px; line-height: 1.55; }
-    .nh-action-grid, .nh-raise-presets { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .nh-preset { padding: 9px 8px; }
+    .nh-control-panel { margin-top: 6px; gap: 6px; }
+    .nh-info-card { display: none; }
+    .nh-action-panel {
+      padding: 8px;
+      border-radius: 14px;
+      background: rgba(8, 14, 25, 0.94);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 12px 22px rgba(0, 0, 0, 0.26);
+    }
+    .nh-action-panel h3 { display: none; }
+    .nh-phase-copy, .nh-action-summary { font-size: 10px; line-height: 1.4; }
+    .nh-action-summary { margin-top: 0; gap: 4px; }
+    .nh-action-summary span:last-child {
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .nh-action-grid,
+    .nh-raise-presets { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; margin-top: 6px; }
+    .nh-action-grid .nh-btn,
+    .nh-raise-presets .nh-preset { min-height: 40px; }
+    .nh-preset { padding: 6px 4px; border-radius: 10px; font-size: 10px; line-height: 1.25; }
+    .nh-footer-note { display: none; }
 
     .nh-side-panel {
-      position: sticky;
-      bottom: calc(8px + env(safe-area-inset-bottom));
-      z-index: 30;
-      max-height: 58px;
-      padding: 10px;
-      border-radius: 18px;
+      position: relative;
+      bottom: auto;
+      z-index: 1;
+      max-height: 44px;
+      padding: 6px;
+      border-radius: 14px;
       overflow: hidden;
       transition: max-height 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
     }
     .nh-side-panel.open {
-      max-height: min(56vh, 420px);
+      max-height: min(30vh, 230px);
       border-color: rgba(132, 246, 224, 0.18);
-      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.36);
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.30);
     }
     .nh-side-panel-head { margin-bottom: 0; }
-    .nh-side-panel.open .nh-side-panel-head { margin-bottom: 10px; }
+    .nh-side-panel.open .nh-side-panel-head { margin-bottom: 6px; }
     .nh-side-panel:not(.open) .nh-side-content { display: none; }
-    .nh-side-panel-close { padding: 8px 10px; font-size: 12px; }
-    .nh-tabs { margin-bottom: 0; }
-    .nh-side-panel.open .nh-tabs { margin-bottom: 10px; }
-    .nh-side-content { max-height: calc(min(56vh, 420px) - 86px); padding-right: 2px; }
-    .nh-rule-card, .nh-log-item { padding: 10px; margin-bottom: 8px; }
-    .nh-rule-card p, .nh-rule-card li, .nh-log-item, .nh-rank-row { font-size: 12px; }
+    .nh-side-panel-close { padding: 6px 8px; font-size: 10px; border-radius: 9px; }
+    .nh-tabs { margin-bottom: 0; gap: 4px; }
+    .nh-side-panel.open .nh-tabs { margin-bottom: 6px; }
+    .nh-tab { padding: 7px 8px; font-size: 10px; border-radius: 10px; }
+    .nh-side-content { max-height: calc(min(30vh, 230px) - 58px); padding-right: 1px; }
+    .nh-rule-card, .nh-log-item { padding: 8px; margin-bottom: 6px; border-radius: 10px; }
+    .nh-rule-card h4 { font-size: 11px; margin-bottom: 4px; }
+    .nh-rule-card p, .nh-rule-card li, .nh-log-item, .nh-rank-row { font-size: 10px; line-height: 1.45; }
+    .nh-rank-row { padding: 6px 7px; gap: 6px; }
+
+    .nh-side-panel-head .nh-tabs { flex: 1; min-width: 0; }
+  }
+
+@media (max-width: 430px) {
+    .nh-root { padding: 3px 3px calc(4px + env(safe-area-inset-bottom)); }
+    .nh-header { gap: 5px; }
+    .nh-title-wrap h1 { font-size: 17px; }
+    .nh-table { min-height: 478px; }
+    .nh-center { left: 54px; top: 270px; width: 92px; }
+    .nh-seat { width: 88px; }
+    .nh-seat.seat-1 { top: 84px; }
+    .nh-seat.seat-3 { top: 160px; }
+    .nh-seat.seat-0 { left: 102px; right: 6px; bottom: 64px; }
+    .nh-card { width: 28px; height: 40px; }
+    .nh-card.small { width: 17px; height: 24px; }
+    .nh-seat.seat-0 .nh-card.small { width: 32px; height: 46px; }
+    .nh-pot { min-width: 88px; }
+    .nh-action-grid .nh-btn,
+    .nh-raise-presets .nh-preset { min-height: 38px; }
   }
 </style>
 </head>
@@ -796,19 +872,4 @@ render();
 </html>
 '''
 
-st.title("NEON HOLD'EM")
-st.caption("iPhone 向けに縦長を圧縮したコンパクト版")
-
-components.html(HTML, height=980, scrolling=True)
-
-with st.expander("デプロイ手順メモ", expanded=False):
-    st.markdown(
-        """
-1. このリポジトリを GitHub に push
-2. Streamlit Community Cloud で GitHub を接続
-3. リポジトリを選び、`app.py` をエントリーポイントに指定
-4. Deploy を押す
-
-必要ファイルは `app.py` と `requirements.txt` だけです。
-"""
-    )
+components.html(HTML, height=760, scrolling=False)
