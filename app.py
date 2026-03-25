@@ -205,10 +205,10 @@ HTML = r'''
   @keyframes nh-float { 0% { opacity: 0; transform: translateY(8px) scale(0.96); } 20% { opacity: 1; } 100% { opacity: 1; transform: translateY(0) scale(1); } }
   @media (max-width: 1180px) { .nh-layout { grid-template-columns: 1fr; } .nh-side-content { max-height: none; } }
   @media (max-width: 860px) {
-    .nh-root { padding: 6px 6px calc(8px + env(safe-area-inset-bottom)); }
+    .nh-root { padding: 4px 4px calc(78px + env(safe-area-inset-bottom)); }
     .nh-shell { max-width: none; }
     .nh-header { gap: 6px; margin-bottom: 8px; }
-    .nh-title-wrap h1 { font-size: 18px; }
+    .nh-title-wrap h1 { font-size: 17px; }
     .nh-title-wrap p { display: none; }
     .nh-top-actions { display: grid; grid-template-columns: 1fr 1fr; width: 100%; gap: 6px; }
     .nh-top-actions .nh-btn { padding: 10px 8px; border-radius: 12px; font-size: 12px; }
@@ -220,16 +220,15 @@ HTML = r'''
     .nh-pill { padding: 6px 9px; font-size: 11px; }
 
     .nh-table {
-      min-height: auto;
-      padding: 8px;
-      border-radius: 22px;
+      min-height: 0;
+      padding: 6px;
+      border-radius: 20px;
       display: grid;
-      grid-template-columns: 98px minmax(0, 1fr);
-      grid-template-rows: auto auto auto auto;
-      gap: 8px;
+      grid-template-columns: 1fr;
+      gap: 6px;
       align-items: start;
     }
-    .nh-table::before { inset: 8px; border-radius: 22px; }
+    .nh-table::before { inset: 6px; border-radius: 18px; }
 
     .nh-center,
     .nh-seat {
@@ -242,17 +241,33 @@ HTML = r'''
     .nh-seat { padding: 8px; border-radius: 14px; }
     .nh-seat.active { transform: none !important; }
 
-    .nh-seat.seat-2 { grid-column: 1; grid-row: 1; }
-    .nh-seat.seat-1 { grid-column: 1; grid-row: 2; }
-    .nh-seat.seat-3 { grid-column: 1; grid-row: 3; }
-    .nh-center { grid-column: 1; grid-row: 4; width: 100%; align-items: flex-start; gap: 6px; }
-    .nh-seat.seat-0 {
-      grid-column: 2;
-      grid-row: 1 / span 4;
-      min-height: 270px;
+    .nh-seat.seat-1,
+    .nh-seat.seat-2,
+    .nh-seat.seat-3 {
+      width: 108px;
+      max-width: 108px;
+      justify-self: start;
+    }
+
+    .nh-seat.seat-1 { grid-row: 1; }
+    .nh-seat.seat-2 { grid-row: 2; }
+    .nh-seat.seat-3 { grid-row: 3; }
+
+    .nh-center {
+      grid-row: 4;
+      width: 100%;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-start;
       justify-content: flex-start;
+      gap: 6px;
+    }
+
+    .nh-seat.seat-0 {
+      grid-row: 5;
+      width: 100%;
+      min-height: 0;
     }
 
     .nh-seat:not(.seat-0) .nh-player-style,
@@ -264,7 +279,7 @@ HTML = r'''
     .nh-seat:not(.seat-0) .nh-stack-row span { display: block; }
     .nh-seat:not(.seat-0) .nh-pressure-bar { margin-top: 6px; height: 5px; }
     .nh-seat:not(.seat-0) .nh-cards { margin-top: 6px; gap: 4px; min-height: auto; }
-    .nh-seat:not(.seat-0) .nh-card.small { width: 15px; height: 22px; border-radius: 6px; }
+    .nh-seat:not(.seat-0) .nh-card.small { width: 16px; height: 24px; border-radius: 6px; }
     .nh-seat:not(.seat-0) .nh-card-corner { font-size: 7px; left: 3px; top: 2px; }
     .nh-seat:not(.seat-0) .nh-card-corner.bottom { right: 3px; bottom: 2px; }
     .nh-seat:not(.seat-0) .nh-card-suit { font-size: 12px; }
@@ -275,45 +290,59 @@ HTML = r'''
     .nh-seat.seat-0 .nh-stack-row { font-size: 12px; margin-top: 6px; }
     .nh-seat.seat-0 .nh-pressure-bar { margin-top: 6px; height: 7px; }
     .nh-seat.seat-0 .nh-cards { margin-top: 8px; gap: 8px; min-height: auto; }
-    .nh-seat.seat-0 .nh-card.small { width: 42px; height: 60px; border-radius: 10px; }
+    .nh-seat.seat-0 .nh-card.small { width: 46px; height: 66px; border-radius: 10px; }
     .nh-seat.seat-0 .nh-card-corner { font-size: 12px; left: 5px; top: 4px; }
     .nh-seat.seat-0 .nh-card-corner.bottom { right: 5px; bottom: 4px; }
     .nh-seat.seat-0 .nh-card-suit { font-size: 22px; }
-    .nh-seat.seat-0 .nh-best-hand { margin-top: 8px; min-height: 16px; font-size: 11px; }
+    .nh-seat.seat-0 .nh-best-hand { margin-top: 8px; min-height: 14px; font-size: 11px; }
     .nh-seat.seat-0 .nh-action-badge { right: 8px; bottom: 8px; font-size: 10px; padding: 5px 7px; }
 
     .nh-community {
+      order: 1;
       width: 100%;
       justify-content: flex-start;
       gap: 4px;
       min-height: auto;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
     }
     .nh-community .nh-card { width: 24px; height: 34px; border-radius: 6px; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.22); }
     .nh-community .nh-card-corner { font-size: 7px; left: 3px; top: 2px; }
     .nh-community .nh-card-corner.bottom { right: 3px; bottom: 2px; }
     .nh-community .nh-card-suit { font-size: 12px; }
 
-    .nh-pot { min-width: 90px; padding: 8px 10px; border-radius: 14px; }
+    .nh-pot { order: 2; min-width: 84px; padding: 8px 10px; border-radius: 14px; }
     .nh-pot-label { font-size: 9px; }
-    .nh-pot-value { font-size: 28px; }
-    .nh-winner-banner { padding: 8px 10px; font-size: 11px; border-radius: 12px; }
+    .nh-pot-value { font-size: 26px; }
+    .nh-winner-banner { order: 3; width: 100%; padding: 8px 10px; font-size: 11px; border-radius: 12px; }
+    .nh-center .nh-btn { order: 4; padding: 8px 10px; font-size: 11px; }
 
-    .nh-control-panel { margin-top: 8px; gap: 6px; }
+    .nh-control-panel {
+      margin-top: 8px;
+      gap: 6px;
+      position: sticky;
+      bottom: 0;
+      z-index: 20;
+    }
     .nh-info-card { display: none; }
-    .nh-action-panel { padding: 8px; border-radius: 14px; }
+    .nh-action-panel {
+      padding: 8px;
+      border-radius: 14px;
+      background: rgba(5, 11, 20, 0.94);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.24);
+    }
     .nh-action-panel h3 { display: none; }
     .nh-action-summary { margin-top: 0; gap: 4px; font-size: 11px; line-height: 1.35; }
     .nh-action-summary span { display: block; width: 100%; }
     .nh-action-grid,
     .nh-raise-presets { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 6px; }
     .nh-action-grid .nh-btn,
-    .nh-raise-presets .nh-preset { padding: 8px 4px; min-height: 40px; border-radius: 10px; font-size: 11px; }
-    .nh-preset { line-height: 1.2; }
+    .nh-raise-presets .nh-preset { padding: 8px 4px; min-height: 40px; border-radius: 10px; font-size: 10px; }
+    .nh-preset { line-height: 1.15; }
     .nh-footer-note { display: none; }
 
-    .nh-side-panel { max-height: 44px; padding: 6px; border-radius: 14px; }
-    .nh-side-panel.open { max-height: 185px; }
+    .nh-side-panel { max-height: 42px; padding: 6px; border-radius: 14px; }
+    .nh-side-panel.open { max-height: 180px; }
     .nh-side-panel-head { margin-bottom: 0; }
     .nh-side-panel.open .nh-side-panel-head { margin-bottom: 6px; }
     .nh-side-panel:not(.open) .nh-side-content { display: none; }
@@ -321,29 +350,31 @@ HTML = r'''
     .nh-side-panel.open .nh-tabs { margin-bottom: 6px; }
     .nh-tab { padding: 8px 8px; font-size: 11px; border-radius: 10px; }
     .nh-side-panel-close { padding: 6px 8px; font-size: 10px; border-radius: 8px; }
-    .nh-side-content { max-height: 120px; padding-right: 2px; }
+    .nh-side-content { max-height: 112px; padding-right: 2px; }
     .nh-rule-card, .nh-log-item { padding: 8px; margin-bottom: 6px; border-radius: 10px; }
     .nh-rule-card h4 { font-size: 11px; margin-bottom: 4px; }
     .nh-rule-card p, .nh-rule-card li, .nh-log-item, .nh-rank-row { font-size: 10px; line-height: 1.4; }
     .nh-rank-row { padding: 6px 8px; }
   }
 
+
   @media (max-width: 430px) {
-    .nh-root { padding: 4px 4px calc(6px + env(safe-area-inset-bottom)); }
-    .nh-title-wrap h1 { font-size: 17px; }
-    .nh-top-actions .nh-btn { font-size: 12px; padding: 9px 6px; }
+    .nh-root { padding: 4px 4px calc(84px + env(safe-area-inset-bottom)); }
+    .nh-title-wrap h1 { font-size: 16px; }
+    .nh-top-actions .nh-btn { font-size: 11px; padding: 9px 6px; }
     .nh-pill { padding: 5px 8px; font-size: 10px; }
-    .nh-table { grid-template-columns: 92px minmax(0, 1fr); gap: 6px; padding: 6px; }
-    .nh-seat { padding: 7px; }
-    .nh-seat.seat-0 { min-height: 248px; }
+    .nh-seat.seat-1,
+    .nh-seat.seat-2,
+    .nh-seat.seat-3 { width: 102px; max-width: 102px; }
     .nh-seat.seat-0 .nh-player-name { font-size: 17px; }
-    .nh-seat.seat-0 .nh-card.small { width: 38px; height: 54px; }
-    .nh-seat:not(.seat-0) .nh-card.small { width: 14px; height: 20px; }
+    .nh-seat.seat-0 .nh-card.small { width: 42px; height: 60px; }
+    .nh-seat:not(.seat-0) .nh-card.small { width: 15px; height: 22px; }
     .nh-community .nh-card { width: 22px; height: 32px; }
-    .nh-pot { min-width: 84px; }
-    .nh-pot-value { font-size: 26px; }
+    .nh-pot { min-width: 78px; }
+    .nh-pot-value { font-size: 24px; }
     .nh-action-summary { font-size: 10px; }
-    .nh-action-grid .nh-btn, .nh-raise-presets .nh-preset { min-height: 38px; font-size: 10px; }
+    .nh-action-grid .nh-btn,
+    .nh-raise-presets .nh-preset { min-height: 38px; font-size: 10px; }
   }
 </style>
 </head>
@@ -852,4 +883,4 @@ render();
 </body>
 </html>
 '''
-components.html(HTML, height=660, scrolling=False)
+components.html(HTML, height=780, scrolling=True)
