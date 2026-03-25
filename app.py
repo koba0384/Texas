@@ -205,163 +205,145 @@ HTML = r'''
   @keyframes nh-float { 0% { opacity: 0; transform: translateY(8px) scale(0.96); } 20% { opacity: 1; } 100% { opacity: 1; transform: translateY(0) scale(1); } }
   @media (max-width: 1180px) { .nh-layout { grid-template-columns: 1fr; } .nh-side-content { max-height: none; } }
   @media (max-width: 860px) {
-    .nh-root { padding: 4px 4px calc(4px + env(safe-area-inset-bottom)); }
+    .nh-root { padding: 6px 6px calc(8px + env(safe-area-inset-bottom)); }
     .nh-shell { max-width: none; }
-    .nh-header { gap: 6px; margin-bottom: 6px; align-items: center; }
-    .nh-title-wrap h1 { font-size: 18px; letter-spacing: 0.04em; }
+    .nh-header { gap: 6px; margin-bottom: 8px; }
+    .nh-title-wrap h1 { font-size: 18px; }
     .nh-title-wrap p { display: none; }
-    .nh-top-actions { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
-    .nh-btn { padding: 8px 9px; font-size: 12px; border-radius: 11px; }
+    .nh-top-actions { display: grid; grid-template-columns: 1fr 1fr; width: 100%; gap: 6px; }
+    .nh-top-actions .nh-btn { padding: 10px 8px; border-radius: 12px; font-size: 12px; }
 
     .nh-layout { grid-template-columns: 1fr; gap: 8px; }
-    .nh-stage-panel { padding: 6px; border-radius: 16px; }
-    .nh-stage-top { gap: 4px; margin-bottom: 6px; }
-    .nh-status-strip { gap: 4px; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 1px; }
-    .nh-status-strip::-webkit-scrollbar { display: none; }
-    .nh-pill { padding: 5px 8px; font-size: 10px; white-space: nowrap; }
+    .nh-stage-panel { padding: 8px; border-radius: 16px; }
+    .nh-stage-top { gap: 6px; margin-bottom: 8px; }
+    .nh-status-strip { gap: 6px; }
+    .nh-pill { padding: 6px 9px; font-size: 11px; }
 
     .nh-table {
-      min-height: 500px;
-      border-radius: 20px;
-      box-shadow: inset 0 0 0 7px rgba(74, 36, 18, 0.68), inset 0 0 0 10px rgba(146, 93, 59, 0.20), 0 14px 24px rgba(0, 0, 0, 0.30);
-    }
-    .nh-table::before { inset: 8px; border-radius: 18px; }
-
-    .nh-center {
-      left: 56px;
-      top: 280px;
-      transform: translate(-50%, -50%);
-      width: 96px;
-      align-items: flex-start;
-      gap: 6px;
-    }
-    .nh-center .nh-btn { width: 96px; padding: 6px 8px; font-size: 10px; border-radius: 10px; }
-    .nh-community {
-      gap: 2px;
       min-height: auto;
+      padding: 8px;
+      border-radius: 22px;
+      display: grid;
+      grid-template-columns: 98px minmax(0, 1fr);
+      grid-template-rows: auto auto auto auto;
+      gap: 8px;
+      align-items: start;
+    }
+    .nh-table::before { inset: 8px; border-radius: 22px; }
+
+    .nh-center,
+    .nh-seat {
+      position: static;
+      transform: none !important;
+      width: auto;
+      margin: 0;
+    }
+
+    .nh-seat { padding: 8px; border-radius: 14px; }
+    .nh-seat.active { transform: none !important; }
+
+    .nh-seat.seat-2 { grid-column: 1; grid-row: 1; }
+    .nh-seat.seat-1 { grid-column: 1; grid-row: 2; }
+    .nh-seat.seat-3 { grid-column: 1; grid-row: 3; }
+    .nh-center { grid-column: 1; grid-row: 4; width: 100%; align-items: flex-start; gap: 6px; }
+    .nh-seat.seat-0 {
+      grid-column: 2;
+      grid-row: 1 / span 4;
+      min-height: 270px;
+      display: flex;
+      flex-direction: column;
       justify-content: flex-start;
-      align-items: flex-start;
+    }
+
+    .nh-seat:not(.seat-0) .nh-player-style,
+    .nh-seat:not(.seat-0) .nh-best-hand { display: none; }
+    .nh-seat:not(.seat-0) .nh-seat-head { align-items: flex-start; }
+    .nh-seat:not(.seat-0) .nh-player-name { font-size: 12px; }
+    .nh-seat:not(.seat-0) .nh-role-badge { min-width: 28px; padding: 3px 6px; font-size: 10px; }
+    .nh-seat:not(.seat-0) .nh-stack-row { display: block; margin-top: 6px; font-size: 11px; line-height: 1.35; }
+    .nh-seat:not(.seat-0) .nh-stack-row span { display: block; }
+    .nh-seat:not(.seat-0) .nh-pressure-bar { margin-top: 6px; height: 5px; }
+    .nh-seat:not(.seat-0) .nh-cards { margin-top: 6px; gap: 4px; min-height: auto; }
+    .nh-seat:not(.seat-0) .nh-card.small { width: 15px; height: 22px; border-radius: 6px; }
+    .nh-seat:not(.seat-0) .nh-card-corner { font-size: 7px; left: 3px; top: 2px; }
+    .nh-seat:not(.seat-0) .nh-card-corner.bottom { right: 3px; bottom: 2px; }
+    .nh-seat:not(.seat-0) .nh-card-suit { font-size: 12px; }
+    .nh-seat:not(.seat-0) .nh-action-badge { right: 6px; bottom: 6px; font-size: 9px; padding: 3px 5px; }
+
+    .nh-seat.seat-0 .nh-player-style { display: none; }
+    .nh-seat.seat-0 .nh-player-name { font-size: 18px; }
+    .nh-seat.seat-0 .nh-stack-row { font-size: 12px; margin-top: 6px; }
+    .nh-seat.seat-0 .nh-pressure-bar { margin-top: 6px; height: 7px; }
+    .nh-seat.seat-0 .nh-cards { margin-top: 8px; gap: 8px; min-height: auto; }
+    .nh-seat.seat-0 .nh-card.small { width: 42px; height: 60px; border-radius: 10px; }
+    .nh-seat.seat-0 .nh-card-corner { font-size: 12px; left: 5px; top: 4px; }
+    .nh-seat.seat-0 .nh-card-corner.bottom { right: 5px; bottom: 4px; }
+    .nh-seat.seat-0 .nh-card-suit { font-size: 22px; }
+    .nh-seat.seat-0 .nh-best-hand { margin-top: 8px; min-height: 16px; font-size: 11px; }
+    .nh-seat.seat-0 .nh-action-badge { right: 8px; bottom: 8px; font-size: 10px; padding: 5px 7px; }
+
+    .nh-community {
+      width: 100%;
+      justify-content: flex-start;
+      gap: 4px;
+      min-height: auto;
       flex-wrap: wrap;
     }
+    .nh-community .nh-card { width: 24px; height: 34px; border-radius: 6px; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.22); }
+    .nh-community .nh-card-corner { font-size: 7px; left: 3px; top: 2px; }
+    .nh-community .nh-card-corner.bottom { right: 3px; bottom: 2px; }
+    .nh-community .nh-card-suit { font-size: 12px; }
 
-    .nh-card { width: 30px; height: 42px; border-radius: 8px; }
-    .nh-card.small { width: 18px; height: 26px; border-radius: 6px; }
-    .nh-card-corner { font-size: 8px; left: 3px; top: 2px; }
-    .nh-card-corner.bottom { right: 3px; bottom: 2px; }
-    .nh-card-suit { font-size: 14px; }
-    .nh-pot { min-width: 92px; padding: 6px 8px; border-radius: 12px; }
-    .nh-pot-label { font-size: 8px; }
-    .nh-pot-value { font-size: 17px; }
-    .nh-winner-banner { padding: 6px 8px; font-size: 10px; border-radius: 10px; }
+    .nh-pot { min-width: 90px; padding: 8px 10px; border-radius: 14px; }
+    .nh-pot-label { font-size: 9px; }
+    .nh-pot-value { font-size: 28px; }
+    .nh-winner-banner { padding: 8px 10px; font-size: 11px; border-radius: 12px; }
 
-    .nh-seat {
-      width: 92px;
-      padding: 6px;
-      border-radius: 12px;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.20);
-    }
-    .nh-seat.active { transform: none; }
-    .nh-seat-head { gap: 3px; align-items: flex-start; }
-    .nh-player-name { font-size: 10px; }
-    .nh-player-style { display: none; }
-    .nh-role-badges { gap: 3px; }
-    .nh-role-badge { min-width: 20px; font-size: 8px; padding: 2px 4px; }
-    .nh-stack-row { margin-top: 4px; gap: 2px; font-size: 9px; flex-direction: column; align-items: flex-start; }
-    .nh-pressure-bar { margin-top: 4px; height: 4px; }
-    .nh-cards { gap: 3px; margin-top: 4px; min-height: 26px; }
-    .nh-best-hand { display: none; }
-    .nh-action-badge { right: 4px; bottom: 4px; font-size: 8px; padding: 2px 5px; }
-
-    .nh-seat.seat-2 { left: 8px; top: 8px; transform: none; }
-    .nh-seat.seat-1 { left: 8px; top: 88px; transform: none; }
-    .nh-seat.seat-3 { left: 8px; top: 168px; transform: none; }
-    .nh-seat.seat-0 {
-      left: 106px;
-      right: 8px;
-      bottom: 68px;
-      transform: none;
-      width: auto;
-      padding: 8px;
-    }
-    .nh-seat.seat-0 .nh-player-name { font-size: 12px; }
-    .nh-seat.seat-0 .nh-stack-row { margin-top: 5px; font-size: 10px; flex-direction: row; gap: 6px; align-items: center; }
-    .nh-seat.seat-0 .nh-pressure-bar { height: 5px; margin-top: 5px; }
-    .nh-seat.seat-0 .nh-cards { gap: 6px; margin-top: 6px; min-height: 48px; }
-    .nh-seat.seat-0 .nh-card.small { width: 34px; height: 48px; border-radius: 8px; }
-    .nh-seat.seat-0 .nh-best-hand { display: block; margin-top: 5px; min-height: 12px; font-size: 10px; }
-
-    .nh-control-panel { margin-top: 6px; gap: 6px; }
+    .nh-control-panel { margin-top: 8px; gap: 6px; }
     .nh-info-card { display: none; }
-    .nh-action-panel {
-      padding: 8px;
-      border-radius: 14px;
-      background: rgba(8, 14, 25, 0.94);
-      backdrop-filter: blur(16px);
-      box-shadow: 0 12px 22px rgba(0, 0, 0, 0.26);
-    }
+    .nh-action-panel { padding: 8px; border-radius: 14px; }
     .nh-action-panel h3 { display: none; }
-    .nh-phase-copy, .nh-action-summary { font-size: 10px; line-height: 1.4; }
-    .nh-action-summary { margin-top: 0; gap: 4px; }
-    .nh-action-summary span:last-child {
-      width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+    .nh-action-summary { margin-top: 0; gap: 4px; font-size: 11px; line-height: 1.35; }
+    .nh-action-summary span { display: block; width: 100%; }
     .nh-action-grid,
-    .nh-raise-presets { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; margin-top: 6px; }
+    .nh-raise-presets { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 6px; }
     .nh-action-grid .nh-btn,
-    .nh-raise-presets .nh-preset { min-height: 40px; }
-    .nh-preset { padding: 6px 4px; border-radius: 10px; font-size: 10px; line-height: 1.25; }
+    .nh-raise-presets .nh-preset { padding: 8px 4px; min-height: 40px; border-radius: 10px; font-size: 11px; }
+    .nh-preset { line-height: 1.2; }
     .nh-footer-note { display: none; }
 
-    .nh-side-panel {
-      position: relative;
-      bottom: auto;
-      z-index: 1;
-      max-height: 44px;
-      padding: 6px;
-      border-radius: 14px;
-      overflow: hidden;
-      transition: max-height 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
-    }
-    .nh-side-panel.open {
-      max-height: min(30vh, 230px);
-      border-color: rgba(132, 246, 224, 0.18);
-      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.30);
-    }
+    .nh-side-panel { max-height: 44px; padding: 6px; border-radius: 14px; }
+    .nh-side-panel.open { max-height: 185px; }
     .nh-side-panel-head { margin-bottom: 0; }
     .nh-side-panel.open .nh-side-panel-head { margin-bottom: 6px; }
     .nh-side-panel:not(.open) .nh-side-content { display: none; }
-    .nh-side-panel-close { padding: 6px 8px; font-size: 10px; border-radius: 9px; }
-    .nh-tabs { margin-bottom: 0; gap: 4px; }
+    .nh-tabs { gap: 6px; margin-bottom: 0; }
     .nh-side-panel.open .nh-tabs { margin-bottom: 6px; }
-    .nh-tab { padding: 7px 8px; font-size: 10px; border-radius: 10px; }
-    .nh-side-content { max-height: calc(min(30vh, 230px) - 58px); padding-right: 1px; }
+    .nh-tab { padding: 8px 8px; font-size: 11px; border-radius: 10px; }
+    .nh-side-panel-close { padding: 6px 8px; font-size: 10px; border-radius: 8px; }
+    .nh-side-content { max-height: 120px; padding-right: 2px; }
     .nh-rule-card, .nh-log-item { padding: 8px; margin-bottom: 6px; border-radius: 10px; }
     .nh-rule-card h4 { font-size: 11px; margin-bottom: 4px; }
-    .nh-rule-card p, .nh-rule-card li, .nh-log-item, .nh-rank-row { font-size: 10px; line-height: 1.45; }
-    .nh-rank-row { padding: 6px 7px; gap: 6px; }
-
-    .nh-side-panel-head .nh-tabs { flex: 1; min-width: 0; }
+    .nh-rule-card p, .nh-rule-card li, .nh-log-item, .nh-rank-row { font-size: 10px; line-height: 1.4; }
+    .nh-rank-row { padding: 6px 8px; }
   }
 
-@media (max-width: 430px) {
-    .nh-root { padding: 3px 3px calc(4px + env(safe-area-inset-bottom)); }
-    .nh-header { gap: 5px; }
+  @media (max-width: 430px) {
+    .nh-root { padding: 4px 4px calc(6px + env(safe-area-inset-bottom)); }
     .nh-title-wrap h1 { font-size: 17px; }
-    .nh-table { min-height: 478px; }
-    .nh-center { left: 54px; top: 270px; width: 92px; }
-    .nh-seat { width: 88px; }
-    .nh-seat.seat-1 { top: 84px; }
-    .nh-seat.seat-3 { top: 160px; }
-    .nh-seat.seat-0 { left: 102px; right: 6px; bottom: 64px; }
-    .nh-card { width: 28px; height: 40px; }
-    .nh-card.small { width: 17px; height: 24px; }
-    .nh-seat.seat-0 .nh-card.small { width: 32px; height: 46px; }
-    .nh-pot { min-width: 88px; }
-    .nh-action-grid .nh-btn,
-    .nh-raise-presets .nh-preset { min-height: 38px; }
+    .nh-top-actions .nh-btn { font-size: 12px; padding: 9px 6px; }
+    .nh-pill { padding: 5px 8px; font-size: 10px; }
+    .nh-table { grid-template-columns: 92px minmax(0, 1fr); gap: 6px; padding: 6px; }
+    .nh-seat { padding: 7px; }
+    .nh-seat.seat-0 { min-height: 248px; }
+    .nh-seat.seat-0 .nh-player-name { font-size: 17px; }
+    .nh-seat.seat-0 .nh-card.small { width: 38px; height: 54px; }
+    .nh-seat:not(.seat-0) .nh-card.small { width: 14px; height: 20px; }
+    .nh-community .nh-card { width: 22px; height: 32px; }
+    .nh-pot { min-width: 84px; }
+    .nh-pot-value { font-size: 26px; }
+    .nh-action-summary { font-size: 10px; }
+    .nh-action-grid .nh-btn, .nh-raise-presets .nh-preset { min-height: 38px; font-size: 10px; }
   }
 </style>
 </head>
@@ -870,4 +852,4 @@ render();
 </body>
 </html>
 '''
-components.html(HTML, height=700, scrolling=False)
+components.html(HTML, height=660, scrolling=False)
